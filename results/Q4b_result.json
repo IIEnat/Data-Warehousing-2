@@ -1,0 +1,200 @@
+[
+  {
+    "value": {
+      "Airline": {
+        "count": 488,
+        "relationships": {
+          "OPERATES": {
+            "count": 0,
+            "properties": {},
+            "direction": "out",
+            "labels": [
+              "Route"
+            ]
+          }
+        },
+        "type": "node",
+        "properties": {
+          "name": {
+            "existence": false,
+            "type": "STRING",
+            "indexed": true,
+            "unique": true
+          },
+          "country": {
+            "existence": false,
+            "type": "STRING",
+            "indexed": false,
+            "unique": false
+          }
+        },
+        "labels": [
+
+        ]
+      },
+      "Airport": {
+        "count": 2795,
+        "relationships": {
+          "ARRIVES_AT": {
+            "count": 1081,
+            "properties": {},
+            "direction": "in",
+            "labels": [
+              "Route"
+            ]
+          },
+          "DEPARTS_FROM": {
+            "count": 1081,
+            "properties": {},
+            "direction": "in",
+            "labels": [
+              "Route"
+            ]
+          }
+        },
+        "type": "node",
+        "properties": {
+          "name": {
+            "existence": false,
+            "type": "STRING",
+            "indexed": true,
+            "unique": true
+          },
+          "country": {
+            "existence": false,
+            "type": "STRING",
+            "indexed": false,
+            "unique": false
+          },
+          "city": {
+            "existence": false,
+            "type": "STRING",
+            "indexed": false,
+            "unique": false
+          }
+        },
+        "labels": [
+
+        ]
+      },
+      "ARRIVES_AT": {
+        "type": "relationship",
+        "count": 57297,
+        "properties": {}
+      },
+      "DEPARTS_FROM": {
+        "type": "relationship",
+        "count": 57297,
+        "properties": {}
+      },
+      "USES": {
+        "type": "relationship",
+        "count": 76968,
+        "properties": {}
+      },
+      "Aircraft": {
+        "count": 114,
+        "relationships": {
+          "USES": {
+            "count": 1437,
+            "properties": {},
+            "direction": "in",
+            "labels": [
+              "Route"
+            ]
+          }
+        },
+        "type": "node",
+        "properties": {
+          "name": {
+            "existence": false,
+            "type": "STRING",
+            "indexed": true,
+            "unique": true
+          }
+        },
+        "labels": [
+
+        ]
+      },
+      "Route": {
+        "count": 57297,
+        "relationships": {
+          "ARRIVES_AT": {
+            "count": 0,
+            "properties": {},
+            "direction": "out",
+            "labels": [
+              "Airport"
+            ]
+          },
+          "DEPARTS_FROM": {
+            "count": 0,
+            "properties": {},
+            "direction": "out",
+            "labels": [
+              "Airport"
+            ]
+          },
+          "USES": {
+            "count": 0,
+            "properties": {},
+            "direction": "out",
+            "labels": [
+              "Aircraft"
+            ]
+          },
+          "OPERATES": {
+            "count": 57297,
+            "properties": {},
+            "direction": "in",
+            "labels": [
+              "Airline"
+            ]
+          }
+        },
+        "type": "node",
+        "properties": {
+          "route_id": {
+            "existence": false,
+            "type": "INTEGER",
+            "indexed": true,
+            "unique": true
+          },
+          "arr_airport": {
+            "existence": false,
+            "type": "STRING",
+            "indexed": false,
+            "unique": false
+          },
+          "airline_name": {
+            "existence": false,
+            "type": "STRING",
+            "indexed": false,
+            "unique": false
+          },
+          "dep_airport": {
+            "existence": false,
+            "type": "STRING",
+            "indexed": false,
+            "unique": false
+          }
+        },
+        "labels": [
+
+        ]
+      },
+      "OPERATES": {
+        "type": "relationship",
+        "count": 57297,
+        "properties": {}
+      }
+    }
+  }
+]
+
+
+
+
+
+
