@@ -6,7 +6,7 @@ CREATE CONSTRAINT airline_name IF NOT EXISTS
 FOR (a:Airline) REQUIRE a.name IS UNIQUE;
 
 CREATE CONSTRAINT airport_name IF NOT EXISTS
-FOR (a:Airport) REQUIRE a.name IS UNIQUE;
+FOR (a:Airport) REQUIRE (a.name, a.city, a.country) IS UNIQUE;
 
 CREATE CONSTRAINT aircraft_name IF NOT EXISTS
 FOR (a:Aircraft) REQUIRE a.name IS UNIQUE;
@@ -29,9 +29,7 @@ SET a.country = row.airline_country;
 
 LOAD CSV WITH HEADERS
 FROM 'https://raw.githubusercontent.com/IIEnat/Data-Warehousing-2/refs/heads/main/csv/airports.csv' AS row
-MERGE (a:Airport {name: row.airport_name})
-SET a.city = row.city,
-    a.country = row.country;
+MERGE (a:Airport {name: row.airport_name, city: row.city, country: row.country});
 
 // ============================================================
 // STEP 4: Import Aircraft nodes
@@ -68,14 +66,14 @@ MERGE (a)-[:OPERATES]->(r);
 LOAD CSV WITH HEADERS
 FROM 'https://raw.githubusercontent.com/IIEnat/Data-Warehousing-2/refs/heads/main/csv/rel_departs.csv' AS row
 MATCH (r:Route {route_id: toInteger(row.route_id)})
-MATCH (a:Airport {name: row.dep_airport})
+MATCH (a:Airport {name: row.dep_airport, city: row.dep_city, country: row.dep_country})
 MERGE (r)-[:DEPARTS_FROM]->(a);
 
 // (Route)-[:ARRIVES_AT]->(Airport)
 LOAD CSV WITH HEADERS
 FROM 'https://raw.githubusercontent.com/IIEnat/Data-Warehousing-2/refs/heads/main/csv/rel_arrives.csv' AS row
 MATCH (r:Route {route_id: toInteger(row.route_id)})
-MATCH (a:Airport {name: row.arr_airport})
+MATCH (a:Airport {name: row.arr_airport, city: row.arr_city, country: row.arr_country})
 MERGE (r)-[:ARRIVES_AT]->(a);
 
 // (Route)-[:USES]->(Aircraft)

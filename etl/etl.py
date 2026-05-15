@@ -44,7 +44,7 @@ dep = routes[["dep_airport", "dep_city", "dep_country"]].rename(
     columns={"dep_airport": "airport_name", "dep_city": "city", "dep_country": "country"})
 arr = routes[["arr_airport", "arr_city", "arr_country"]].rename(
     columns={"arr_airport": "airport_name", "arr_city": "city", "arr_country": "country"})
-airports = pd.concat([dep, arr]).drop_duplicates(subset=["airport_name"]).reset_index(drop=True)
+airports = pd.concat([dep, arr]).drop_duplicates(subset=["airport_name", "city", "country"]).reset_index(drop=True)
 airports.to_csv("airports.csv", index=False)
 print(f"airports.csv:  {len(airports)} rows")
 
@@ -68,11 +68,11 @@ routes[["airline_name", "route_id"]].to_csv("rel_operates.csv", index=False)
 print(f"rel_operates.csv: {len(routes)} rows")
 
 # --- rel_departs.csv: (route)-[:DEPARTS_FROM]->(airport) ---
-routes[["route_id", "dep_airport"]].to_csv("rel_departs.csv", index=False)
+routes[["route_id", "dep_airport", "dep_city", "dep_country"]].to_csv("rel_departs.csv", index=False)
 print(f"rel_departs.csv:  {len(routes)} rows")
 
 # --- rel_arrives.csv: (route)-[:ARRIVES_AT]->(airport) ---
-routes[["route_id", "arr_airport"]].to_csv("rel_arrives.csv", index=False)
+routes[["route_id", "arr_airport", "arr_city", "arr_country"]].to_csv("rel_arrives.csv", index=False)
 print(f"rel_arrives.csv:  {len(routes)} rows")
 
 # --- rel_uses.csv: (route)-[:USES]->(aircraft) ---
