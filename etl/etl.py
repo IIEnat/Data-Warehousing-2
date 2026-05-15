@@ -1,6 +1,6 @@
 import pandas as pd
 
-df = pd.read_csv("Project2_dataset.csv")
+df = pd.read_csv("raw.csv")
 
 df.columns = [
     "airline_name", "airline_country",
