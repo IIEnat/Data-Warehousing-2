@@ -14,12 +14,7 @@ Issues corrected:
    under both United Kingdom and Canada). These were verified manually against
    public sources and reassigned to the correct country.
 
-3. City disambiguation: one legitimate name+city collision (San Jose Airport,
-   San Jose, Philippines vs Norman Y. Mineta San Jose International Airport,
-   San Jose, United States) was resolved by renaming the Philippine entry's
-   city to "Mindoro" (its real region in Occidental Mindoro, Philippines).
-
-4. Self-loop: one row had departure airport == arrival airport (South Pacific
+3. Self-loop: one row had departure airport == arrival airport (South Pacific
    Island Airways flying Iskandar Airport, Pangkalan Bun, Indonesia, to itself).
    South Pacific Island Airways is a defunct American Samoan carrier with no
    plausible Indonesian operation, so this was treated as a data error and
@@ -49,7 +44,7 @@ df.columns = [
 df.loc[df["dep_city"] == "BRISTOL", "dep_city"] = "Bristol"
 df.loc[df["arr_city"] == "BRISTOL", "arr_city"] = "Bristol"
 
-# --- 2 & 3. City and country fixes ---
+# --- 2. Country fixes ---
 # (airport_name, city) -> canonical country
 COUNTRY_FIXES = {
     ("Alberto Carnevalli Airport", "Merida"): "Venezuela",
@@ -84,33 +79,17 @@ COUNTRY_FIXES = {
     ("Tri-Cities Regional TN/VA Airport", "Bristol"): "United States",
 }
 
-# (airport_name, city, country) -> new city
-CITY_FIXES = {
-    ("San Jose Airport", "San Jose", "Philippines"): "Mindoro",
-}
-
-
-def fix_city(name, city, country):
-    return CITY_FIXES.get((name, city, country), city)
-
 
 def fix_country(name, city, country):
     return COUNTRY_FIXES.get((name, city), country)
 
-
-# City rename must run BEFORE country fix because CITY_FIXES is keyed on the
-# original country value (used to disambiguate which row to rename).
-df["dep_city"] = df.apply(
-    lambda r: fix_city(r["dep_airport"], r["dep_city"], r["dep_country"]), axis=1)
-df["arr_city"] = df.apply(
-    lambda r: fix_city(r["arr_airport"], r["arr_city"], r["arr_country"]), axis=1)
 
 df["dep_country"] = df.apply(
     lambda r: fix_country(r["dep_airport"], r["dep_city"], r["dep_country"]), axis=1)
 df["arr_country"] = df.apply(
     lambda r: fix_country(r["arr_airport"], r["arr_city"], r["arr_country"]), axis=1)
 
-# --- 4. Drop self-loops (data errors) ---
+# --- 3. Drop self-loops (data errors) ---
 before = len(df)
 df = df[df["dep_airport"] != df["arr_airport"]].reset_index(drop=True)
 dropped = before - len(df)
@@ -123,5 +102,5 @@ df.columns = [
     "Plane Name"
 ]
 df.to_csv("cleaned.csv", index=False)
-print(f"processed.csv: {len(df)} rows ({dropped} self-loop row(s) dropped)")
-print(f"Applied {len(COUNTRY_FIXES)} country fixes and {len(CITY_FIXES)} city renames.")
+print(f"cleaned.csv: {len(df)} rows ({dropped} self-loop row(s) dropped)")
+print(f"Applied {len(COUNTRY_FIXES)} country fixes.")
